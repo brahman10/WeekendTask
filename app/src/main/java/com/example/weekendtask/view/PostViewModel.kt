@@ -15,7 +15,8 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
-class PostViewModel @Inject constructor(private val postRepository: PostRepository):ViewModel(){
+class PostViewModel @Inject constructor(private val postRepository: PostRepository,
+                                        private val postDao: PostDao):ViewModel(){
 
     var postList = MutableLiveData<List<Posts>>()
 
@@ -33,9 +34,9 @@ class PostViewModel @Inject constructor(private val postRepository: PostReposito
                     val type = object : TypeToken<List<Posts?>?>() {}.type
                     val contactList: List<Posts> = gson.fromJson(apiResponse.body(), type)
                     postList.value= contactList
-                    for (contact in contactList) {
-//                        postDao.addNote(contact)
-                        Log.e("Data","${contact.id.toString()} \n Inserted Successfully")
+                    withContext(Dispatchers.IO)
+                    {
+                        postRepository.insertData(postList.value!!)
                     }
 
                 }
@@ -43,6 +44,19 @@ class PostViewModel @Inject constructor(private val postRepository: PostReposito
                 else -> {
 
                 }
+            }
+        }
+    }
+
+
+    fun getPostsFromDatabase()
+    {
+        viewModelScope.launch {
+            postList.value = postRepository.getPostsFromDatabase()
+
+            for (post in postList.value!!)
+            {
+                Log.e("Data from Room","${post.id} \n")
             }
         }
     }
