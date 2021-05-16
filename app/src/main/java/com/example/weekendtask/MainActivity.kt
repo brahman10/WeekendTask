@@ -25,13 +25,20 @@ class MainActivity : AppCompatActivity() {
             DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         activityMainBinding.myAdapter=postAdapter
-        postViewModel.getPostsFromDatabase()
 
-        postViewModel.postList.observe(this, Observer {
+        postViewModel.getPostsFromDatabasePaging()
+        postViewModel.postListFromDB.observe(this, Observer {
             if (it!=null) {
-                postAdapter.setPostList(it)
+                postAdapter.submitList(it)
             }
-
         })
+//        postViewModel.getPostsFromDatabase()
+//
+//        postViewModel.postList.observe(this, Observer {
+//            if (it!=null) {
+//                postAdapter.setPostList(it)
+//            }
+//
+//        })
     }
 }

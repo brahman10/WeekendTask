@@ -1,6 +1,9 @@
 package com.example.weekendtask.repo
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.paging.PagedList
+import androidx.paging.toLiveData
 import com.example.weekendtask.db.PostDao
 import com.example.weekendtask.network.interfaces.ApiInterface
 import com.google.gson.JsonArray
@@ -32,5 +35,26 @@ class PostRepository @Inject constructor( private val apiInterface: ApiInterface
             postDao.addNote(post)
             Log.e("Data","${post.id} \n Inserted Successfully")
         }
+    }
+
+    suspend fun getPostsFromDatabasePaging(): LiveData<PagedList<Posts>>
+    {
+        var list :LiveData<PagedList<Posts>>
+        withContext(Dispatchers.Main)
+        {
+            list =postDao.getAllPostsPaging().toLiveData(pageSize = 10)
+//            if(list!=null)
+//            {
+//                for (post in list.value!!)
+//                {
+//                    Log.e("dataa","${post.title}")
+//                }
+//            }
+//            else
+//            {
+//                Log.e("dataa","Null h bro")
+//            }
+        }
+        return list!!
     }
 }
