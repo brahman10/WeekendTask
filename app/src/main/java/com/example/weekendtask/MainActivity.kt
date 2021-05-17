@@ -26,19 +26,18 @@ class MainActivity : AppCompatActivity() {
 
         activityMainBinding.myAdapter=postAdapter
 
-        postViewModel.getPostsFromDatabasePaging()
-        postViewModel.postListFromDB.observe(this, Observer {
-            if (it!=null) {
-                postAdapter.submitList(it)
-            }
-        })
-//        postViewModel.getPostsFromDatabase()
-//
-//        postViewModel.postList.observe(this, Observer {
+//        postViewModel.getPostsFromDatabasePaging()
+//        postViewModel.postListFromDB.observe(this, Observer {
 //            if (it!=null) {
-//                postAdapter.setPostList(it)
+//                postAdapter.submitList(it)
 //            }
-//
 //        })
+        postViewModel.getPostsFromDatabase()
+        postViewModel.postList.observe(this, Observer {
+            if (it!=null) {
+                postAdapter.setPostList(it)
+            }
+
+        })
     }
 }
