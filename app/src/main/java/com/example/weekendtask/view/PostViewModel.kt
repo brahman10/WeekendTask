@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagedList
 import com.example.weekendtask.repo.Posts
 import com.example.weekendtask.repo.PostRepository
 import com.google.gson.Gson
@@ -18,6 +19,7 @@ import javax.inject.Inject
 class PostViewModel @Inject constructor(private val postRepository: PostRepository):ViewModel(){
 
     var postList = MutableLiveData<List<Posts>>()
+    lateinit var postListFromDB:LiveData<PagedList<Posts>>
     private fun getPosts()
     {
         viewModelScope.launch {
@@ -60,14 +62,14 @@ class PostViewModel @Inject constructor(private val postRepository: PostReposito
         }
     }
 
-//    fun getPostsFromDatabasePaging()
-//    {
-//        viewModelScope.launch {
-//            postListFromDB = postRepository.getPostsFromDatabasePaging()
-//            for (post in postListFromDB.)
+    fun getPostsFromDatabasePaging()
+    {
+        viewModelScope.launch {
+            postListFromDB = postRepository.getPostsFromDatabasePaging()
+//            for (post in postListFromDB.value!!)
 //            {
 //                Log.e("Data from Room","${post.id} \n")
 //            }
-//        }
-//    }
+        }
+    }
 }

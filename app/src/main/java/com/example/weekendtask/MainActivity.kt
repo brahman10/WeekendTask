@@ -1,6 +1,7 @@
 package com.example.weekendtask
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -26,18 +27,23 @@ class MainActivity : AppCompatActivity() {
 
         activityMainBinding.myAdapter=postAdapter
 
-//        postViewModel.getPostsFromDatabasePaging()
-//        postViewModel.postListFromDB.observe(this, Observer {
-//            if (it!=null) {
-//                postAdapter.submitList(it)
-//            }
-//        })
-        postViewModel.getPostsFromDatabase()
-        postViewModel.postList.observe(this, Observer {
+        postViewModel.getPostsFromDatabasePaging()
+        postViewModel.postListFromDB.observe(this, Observer {
             if (it!=null) {
-                postAdapter.setPostList(it)
-            }
+                val list =it.snapshot()
+                postAdapter.setPostList(list)
+                if (list!=null)
+                {
+                    for (a in list)
+                    {
+                        if (a!=null)
+                        {
+                            Log.e("Dataa","${a.id} ")
+                        }
+                    }
+                }
 
+            }
         })
     }
 }
